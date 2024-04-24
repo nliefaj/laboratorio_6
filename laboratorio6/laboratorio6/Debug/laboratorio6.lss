@@ -3,31 +3,31 @@ laboratorio6.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000006  00800100  00000192  00000226  2**0
+  0 .data         0000000c  00800100  00000192  00000226  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         00000192  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000004  00800106  00800106  0000022c  2**0
+  2 .bss          00000004  0080010c  0080010c  00000232  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000022c  2**0
+  3 .comment      00000030  00000000  00000000  00000232  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000025c  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000264  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000040  00000000  00000000  0000029c  2**0
+  5 .debug_aranges 00000040  00000000  00000000  000002a4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000807  00000000  00000000  000002dc  2**0
+  6 .debug_info   00000807  00000000  00000000  000002e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000006c1  00000000  00000000  00000ae3  2**0
+  7 .debug_abbrev 000006c1  00000000  00000000  00000aeb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000002e3  00000000  00000000  000011a4  2**0
+  8 .debug_line   000002e3  00000000  00000000  000011ac  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000078  00000000  00000000  00001488  2**2
+  9 .debug_frame  00000078  00000000  00000000  00001490  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003c7  00000000  00000000  00001500  2**0
+ 10 .debug_str    000003c7  00000000  00000000  00001508  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000090  00000000  00000000  000018c7  2**0
+ 11 .debug_loc    00000090  00000000  00000000  000018cf  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000030  00000000  00000000  00001957  2**0
+ 12 .debug_ranges 00000030  00000000  00000000  0000195f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -77,13 +77,13 @@ Disassembly of section .text:
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
   82:	0d 92       	st	X+, r0
-  84:	a6 30       	cpi	r26, 0x06	; 6
+  84:	ac 30       	cpi	r26, 0x0C	; 12
   86:	b1 07       	cpc	r27, r17
   88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
 
 0000008a <__do_clear_bss>:
   8a:	21 e0       	ldi	r18, 0x01	; 1
-  8c:	a6 e0       	ldi	r26, 0x06	; 6
+  8c:	ac e0       	ldi	r26, 0x0C	; 12
   8e:	b1 e0       	ldi	r27, 0x01	; 1
   90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
 
@@ -91,7 +91,7 @@ Disassembly of section .text:
   92:	1d 92       	st	X+, r1
 
 00000094 <.do_clear_bss_start>:
-  94:	aa 30       	cpi	r26, 0x0A	; 10
+  94:	a0 31       	cpi	r26, 0x10	; 16
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
   9a:	0e 94 8a 00 	call	0x114	; 0x114 <main>
@@ -130,9 +130,9 @@ void initUART9600(void){
   be:	e1 ec       	ldi	r30, 0xC1	; 193
   c0:	f0 e0       	ldi	r31, 0x00	; 0
   c2:	10 82       	st	Z, r1
-	UCSR0B|=(1<<RXCIE0)|(1<<RXEN0)|(TXEN0);
+	UCSR0B|=(1<<RXCIE0)|(1<<RXEN0)|(1<<TXEN0);
   c4:	80 81       	ld	r24, Z
-  c6:	83 69       	ori	r24, 0x93	; 147
+  c6:	88 69       	ori	r24, 0x98	; 152
   c8:	80 83       	st	Z, r24
 	
 	//Configurar registro C<Frame asincrono 8 bits de datos sin pariedad, 1 bit de stop
@@ -208,27 +208,27 @@ int main(void)
 	initUART9600();
  114:	0e 94 53 00 	call	0xa6	; 0xa6 <initUART9600>
 	//init_adc();
-	writeUART('H');
- 118:	88 e4       	ldi	r24, 0x48	; 72
- 11a:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
-	writeUART('O');
- 11e:	8f e4       	ldi	r24, 0x4F	; 79
- 120:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
-	writeUART('L');
- 124:	8c e4       	ldi	r24, 0x4C	; 76
- 126:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
-	writeUART('A');
- 12a:	81 e4       	ldi	r24, 0x41	; 65
- 12c:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
-	writeUART('\n');
- 130:	8a e0       	ldi	r24, 0x0A	; 10
- 132:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
-	writetxtUART("Hola\n");
- 136:	80 e0       	ldi	r24, 0x00	; 0
- 138:	91 e0       	ldi	r25, 0x01	; 1
- 13a:	0e 94 72 00 	call	0xe4	; 0xe4 <writetxtUART>
 	sei();
- 13e:	78 94       	sei
+ 118:	78 94       	sei
+	writeUART('H');
+ 11a:	88 e4       	ldi	r24, 0x48	; 72
+ 11c:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
+	writeUART('O');
+ 120:	8f e4       	ldi	r24, 0x4F	; 79
+ 122:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
+	writeUART('L');
+ 126:	8c e4       	ldi	r24, 0x4C	; 76
+ 128:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
+	writeUART('A');
+ 12c:	81 e4       	ldi	r24, 0x41	; 65
+ 12e:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
+	writeUART('\n');
+ 132:	8a e0       	ldi	r24, 0x0A	; 10
+ 134:	0e 94 83 00 	call	0x106	; 0x106 <writeUART>
+	writetxtUART("Hola mundo");
+ 138:	80 e0       	ldi	r24, 0x00	; 0
+ 13a:	91 e0       	ldi	r25, 0x01	; 1
+ 13c:	0e 94 72 00 	call	0xe4	; 0xe4 <writetxtUART>
  140:	ff cf       	rjmp	.-2      	; 0x140 <main+0x2c>
 
 00000142 <__vector_18>:
@@ -247,25 +247,25 @@ ISR(USART_RX_vect){
  14e:	9f 93       	push	r25
 	buffRX=UDR0;
  150:	80 91 c6 00 	lds	r24, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7f80c6>
- 154:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <buffRX>
+ 154:	80 93 0f 01 	sts	0x010F, r24	; 0x80010f <buffRX>
 	while(!(UCSR0A&(1<<UDRE0)));//esperar hasta que el udre0 esté en 1
  158:	80 91 c0 00 	lds	r24, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7f80c0>
  15c:	85 ff       	sbrs	r24, 5
  15e:	fc cf       	rjmp	.-8      	; 0x158 <__vector_18+0x16>
 	valor_buff=buffRX;//valor que queremos enviar
- 160:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <buffRX>
- 164:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <valor_buff>
+ 160:	80 91 0f 01 	lds	r24, 0x010F	; 0x80010f <buffRX>
+ 164:	80 93 0e 01 	sts	0x010E, r24	; 0x80010e <valor_buff>
 	leds1=(buffRX);
- 168:	90 91 09 01 	lds	r25, 0x0109	; 0x800109 <buffRX>
- 16c:	90 93 07 01 	sts	0x0107, r25	; 0x800107 <leds1>
+ 168:	90 91 0f 01 	lds	r25, 0x010F	; 0x80010f <buffRX>
+ 16c:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <leds1>
 	leds2=(valor_buff>>4);
  170:	82 95       	swap	r24
  172:	8f 70       	andi	r24, 0x0F	; 15
- 174:	80 93 06 01 	sts	0x0106, r24	; 0x800106 <__data_end>
+ 174:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <__data_end>
 	PORTB=leds1;
  178:	95 b9       	out	0x05, r25	; 5
 	PORTC=leds2;
- 17a:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__data_end>
+ 17a:	80 91 0c 01 	lds	r24, 0x010C	; 0x80010c <__data_end>
  17e:	88 b9       	out	0x08, r24	; 8
 }
  180:	9f 91       	pop	r25

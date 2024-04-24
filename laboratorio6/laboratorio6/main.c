@@ -20,7 +20,7 @@ uint8_t leds2=0;
 
 void initUART9600(void);
 void writeUART(char caracter);//funcion para escribir
-void writetxtUART(char* caracter);
+void writetxtUART(char* texto);
 
 
 
@@ -29,14 +29,14 @@ int main(void)
 	
 	initUART9600();
 	//init_adc();
+	sei();
 	writeUART('H');
 	writeUART('O');
 	writeUART('L');
 	writeUART('A');
 	writeUART('\n');
-	writetxtUART("Hola\n");
-	sei();
-    while (1) 
+	writetxtUART("Hola mundo");
+    while (1)
     {
 		
     }
@@ -79,7 +79,7 @@ void initUART9600(void){
 	
 	//configurar registro B, habilotar isr rx, bits para habilitar RX y TX
 	UCSR0B=0;
-	UCSR0B|=(1<<RXCIE0)|(1<<RXEN0)|(TXEN0);
+	UCSR0B|=(1<<RXCIE0)|(1<<RXEN0)|(1<<TXEN0);
 	
 	//Configurar registro C<Frame asincrono 8 bits de datos sin pariedad, 1 bit de stop
 	UCSR0C=0;
