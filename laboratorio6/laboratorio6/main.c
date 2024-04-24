@@ -14,15 +14,19 @@
 //variables
 volatile char buffRX;
 uint8_t valor_adc=0;
-uint8_t leds=0;
+uint8_t valor_buff=0;
+uint8_t leds1=0;
+uint8_t leds2=0;
 
 void initUART9600(void);
 void writeUART(char caracter);//funcion para escribir
+void writetxtUART(char* caracter);
 
 
 
 int main(void)
 {
+	
 	initUART9600();
 	//init_adc();
 	writeUART('H');
@@ -30,8 +34,8 @@ int main(void)
 	writeUART('L');
 	writeUART('A');
 	writeUART('\n');
+	writetxtUART("Hola\n");
 	sei();
-	
     while (1) 
     {
 		
@@ -95,7 +99,6 @@ void writetxtUART(char* texto){
 }
 
 void writeUART(char caracter){
-//revisar el udre0 para recibir nuevo mensaje si =1 esta vacío
 	while(!(UCSR0A&(1<<UDRE0)));//esperar hasta que el udre0 esté en 1
 	UDR0=caracter;//valor que queremos enviar
 	
@@ -104,5 +107,9 @@ void writeUART(char caracter){
 ISR(USART_RX_vect){
 	buffRX=UDR0;
 	while(!(UCSR0A&(1<<UDRE0)));//esperar hasta que el udre0 esté en 1
-	leds=buffRX;//valor que queremos enviar
+	valor_buff=buffRX;//valor que queremos enviar
+	leds1=(buffRX);
+	leds2=(valor_buff>>4);
+	PORTB=leds1;
+	PORTC=leds2;
 }
