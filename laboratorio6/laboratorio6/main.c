@@ -17,8 +17,11 @@ uint8_t valor_adc=0;
 uint8_t valor_buff=0;
 uint8_t leds1=0;
 uint8_t leds2=0;
+uint8_t flag=1;
+uint8_t flag_ascii=0;
 
 void initUART9600(void);
+void init_adc(void);
 void writeUART(char caracter);//funcion para escribir
 void writetxtUART(char* texto);
 
@@ -26,22 +29,26 @@ void writetxtUART(char* texto);
 
 int main(void)
 {
-	
+	cli();
 	initUART9600();
-	//init_adc();
+	init_adc();
 	sei();
 	writeUART('H');
 	writeUART('O');
 	writeUART('L');
 	writeUART('A');
 	writeUART('\n');
-	writetxtUART("Hola mundo");
     while (1)
     {
-		
+		ADCSRA|=(1<<ADSC);
+		_delay_ms(100);
+		if (flag==1){
+			writetxtUART("Menú:\n 1. Leer potenciometro \n 2. Enviar Ascii \n");
+		}
+			
     }
 }
-/*
+
 void init_adc(void){
 	ADMUX = 0;
 	ADCSRA=0;
@@ -66,7 +73,8 @@ void init_adc(void){
 
 ISR(ADC_vect){
 	valor_adc=ADCH;	
-}*/
+	ADCSRA|=(1<<ADIF);
+}
 
 void initUART9600(void){
 	//configurar pines tx y rx
@@ -95,6 +103,7 @@ void writetxtUART(char* texto){
 	for (i=0;texto[i]!='\0';i++){
 		while(!(UCSR0A&(1<<UDRE0)));//esperar hasta que el udre0 esté en 1
 		UDR0=texto[i];//cuando i nulo se acaba
+	flag=0;
 	}
 }
 
@@ -108,8 +117,27 @@ ISR(USART_RX_vect){
 	buffRX=UDR0;
 	while(!(UCSR0A&(1<<UDRE0)));//esperar hasta que el udre0 esté en 1
 	valor_buff=buffRX;//valor que queremos enviar
-	leds1=(buffRX);
-	leds2=(valor_buff>>4);
-	PORTB=leds1;
-	PORTC=leds2;
+	if (valor_buff==0b00110001){
+		writeUART(valor_adc);
+		writeUART('\n');
+		/*leds1=(valor_adc);
+		leds2=(valor_adc>>4);
+		PORTB=leds1;
+		PORTC=leds2;*/
+		flag=1;
+	}else if (valor_buff==0b00110010){
+		writetxtUART("Ingrese un caracter\n");
+		flag_ascii=1;
+	}else if (flag_ascii==1){
+		leds1=(buffRX);
+		leds2=(buffRX>>4);
+		PORTB=leds1;
+		PORTC=leds2;
+		flag=1;
+		flag_ascii=0;
+	}else{
+		writetxtUART("Opcion invalida\n");
+		flag=1;
+	}
+	
 }
